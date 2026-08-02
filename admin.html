@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - DVARY GAMES</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 40px;
+        }
+        .admin-box {
+            max-width: 800px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        h1 { color: #ff4757; }
+        button {
+            padding: 10px 20px;
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #ff6b81; }
+    </style>
+</head>
+<body>
+
+    <!-- Ujumbe wa kusubiri wakati unathibitishwa -->
+    <div id="loading" style="text-align: center; margin-top: 100px; font-size: 18px;">
+        Inathibitisha utambulisho wako, tafadhali subiri...
+    </div>
+
+    <!-- Paneli halisi ya Admin (Imefichwa mwanzo) -->
+    <div id="admin-panel" class="admin-box" style="display: none;">
+        <h1>Paneli Kuu ya Admin - DVARY GAMES</h1>
+        <p>Karibu Mkuu! Hapa unaweza kuongeza au kufuta michezo na kusimamia mfumo wako.</p>
+        
+        <hr style="border-color: #333; margin: 20px 0;">
+        
+        <button onclick="tokaAdmin()">Toka (Logout)</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMvYgLyPNhREV6ReCosa7Ia2arDbITPmM",
+          authDomain: "dvary-game.firebaseapp.com",
+          projectId: "dvary-game",
+          storageBucket: "dvary-game.firebasestorage.app",
+          messagingSenderId: "184500970711",
+          appId: "1:184500970711:web:7f9e0de296d60900c93c92",
+          measurementId: "G-P6KSDKFK0S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const ADMIN_EMAIL = "dullamanyama0@gmail.com";
+
+        // MLINZI WA UKURASA WA ADMIN
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user.email === ADMIN_EMAIL) {
+                    // Wewe ni sahihi! Onesha ukurasa
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("admin-panel").style.display = "block";
+                } else {
+                    // Amelogin mtu mwingine ambaye sio wewe
+                    alert("Samahani, huna ruhusa ya kufikia ukurasa huu!");
+                    window.location.href = "index.html";
+                }
+            } else {
+                // Hajalogin kabisa
+                alert("Tafadhali login kupitia ukurasa mkuu kwanza!");
+                window.location.href = "index.html";
+            }
+        });
+
+        // Kitufe cha kutoka
+        window.tokaAdmin = function() {
+            signOut(auth).then(() => {
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+</body>
+</html>
+
