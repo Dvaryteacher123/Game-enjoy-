@@ -1,0 +1,55 @@
+{
+  "name": "PHONEPHIX GAMES",
+  "short_name": "PhonePhix",
+  "description": "Discover & Play Amazing Games - Your Ultimate Gaming Platform",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00ff88",
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["games", "entertainment", "gaming"],
+  "lang": "sw",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home-screen.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Games",
+      "short_name": "Games",
+      "description": "View all available games",
+      "url": "/index.html#games"
+    },
+    {
+      "name": "Categories",
+      "short_name": "Categories",
+      "description": "Browse by category",
+      "url": "/index.html#categories"
+    }
+  ]
+}
