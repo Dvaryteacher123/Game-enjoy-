@@ -1,0 +1,386 @@
+<!--
+  ============================================================
+  FILE:  index.html  (Sehemu ya mbele ya DVARY GAMES)
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DVARY GAMES · Michezo</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ----- RESET & BASE ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #0b0e1a 0%, #1a1f33 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+        }
+
+        /* ----- HEADER / BRAND ----- */
+        .brand-header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 40px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .brand-header .brand {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-header .brand span {
+            font-weight: 300;
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .brand-header .admin-link {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-header .admin-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f093fb;
+            border-color: rgba(240, 147, 251, 0.2);
+        }
+
+        .brand-header .admin-link i {
+            font-size: 14px;
+        }
+
+        /* ----- SEHEMU YA ORODHA YA MICHEZO ----- */
+        .games-grid {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        /* Kadi ya mchezo */
+        .game-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 24px 20px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-card .icon-wrapper {
+            font-size: 36px;
+            color: #f093fb;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-card .icon-wrapper i {
+            background: rgba(240, 147, 251, 0.12);
+            padding: 10px;
+            border-radius: 16px;
+        }
+
+        .game-card .game-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #fff;
+            letter-spacing: -0.2px;
+        }
+
+        .game-card .game-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .game-card .game-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #f093fb;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            background: rgba(240, 147, 251, 0.08);
+            border: 1px solid rgba(240, 147, 251, 0.12);
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            margin-top: 4px;
+        }
+
+        .game-card .game-link:hover {
+            background: rgba(240, 147, 251, 0.15);
+            border-color: rgba(240, 147, 251, 0.25);
+            transform: translateX(4px);
+        }
+
+        .game-card .game-link i {
+            font-size: 13px;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card .game-link:hover i {
+            transform: translateX(4px);
+        }
+
+        /* ----- Hali ya upakiaji / hakuna michezo ----- */
+        .loading-state,
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .loading-state i,
+        .empty-state i {
+            font-size: 44px;
+            display: block;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .loading-state i.fa-spinner {
+            color: #f093fb;
+            opacity: 0.7;
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 600px) {
+            .brand-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .brand-header .brand {
+                font-size: 24px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .game-card {
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!--                     HEADER / BRAND                            -->
+    <!-- ============================================================ -->
+    <header class="brand-header">
+        <div class="brand">DVARY <span>GAMES</span></div>
+        <a href="admin.html" class="admin-link">
+            <i class="fas fa-user-cog"></i> Admin Panel
+        </a>
+    </header>
+
+    <!-- ============================================================ -->
+    <!--                 ORODHA YA MICHEZO (inajazwa na JS)            -->
+    <!-- ============================================================ -->
+    <div id="games-container" class="games-grid">
+        <!-- Hali ya upakiaji itaonekana hapa kabla ya data kuja -->
+        <div class="loading-state" id="loading-placeholder">
+            <i class="fas fa-spinner fa-pulse"></i>
+            Inapakia michezo...
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!--                      JAVASCRIPT (ES Modules)                   -->
+    <!-- ============================================================ -->
+    <script type="module">
+        // ------------------------------------------------------------------
+        //  Import functions from app.js (Firestore + Auth)
+        // ------------------------------------------------------------------
+        import {
+            getGames,
+            onAuthStateChanged,
+            isAdminUser
+        } from "./app.js";
+
+        // ------------------------------------------------------------------
+        //  DOM refs
+        // ------------------------------------------------------------------
+        const container = document.getElementById('games-container');
+        const loadingPlaceholder = document.getElementById('loading-placeholder');
+
+        // ------------------------------------------------------------------
+        //  Helper: escape HTML
+        // ------------------------------------------------------------------
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ------------------------------------------------------------------
+        //  Load and render games
+        // ------------------------------------------------------------------
+        async function loadAndRenderGames() {
+            try {
+                const games = await getGames();
+
+                // Ondoa placeholder ya upakiaji (kama bado ipo)
+                if (loadingPlaceholder) {
+                    loadingPlaceholder.remove();
+                }
+
+                // Hakuna michezo
+                if (!games || games.length === 0) {
+                    container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-gamepad"></i>
+                                <p>Hakuna michezo iliyopo kwa sasa.</p>
+                                <p style="font-size:13px;margin-top:6px;color:rgba(255,255,255,0.2);">
+                                    Nenda kwenye <a href="admin.html" style="color:#f093fb;text-decoration:none;">Admin Panel</a> kuongeza.
+                                </p>
+                            </div>
+                        `;
+                    return;
+                }
+
+                // Jaza gridi ya michezo
+                container.innerHTML = '';
+                games.forEach((game) => {
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+
+                    // Icon (tunaweka icon ya default)
+                    const iconHtml = `
+                            <div class="icon-wrapper">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                        `;
+
+                    const title = escapeHtml(game.title || 'Mchezo');
+                    const desc = escapeHtml(game.description || 'Hakuna maelezo.');
+                    const url = game.gameUrl || '#';
+
+                    card.innerHTML = `
+                            ${iconHtml}
+                            <div class="game-title">${title}</div>
+                            <div class="game-desc">${desc}</div>
+                            <a href="${escapeHtml(url)}" target="_blank" class="game-link" rel="noopener noreferrer">
+                                Cheza Sasa <i class="fas fa-arrow-right"></i>
+                            </a>
+                        `;
+
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Hitilafu wakati wa kupakia michezo:', error);
+                // Onyesha ujumbe wa hitilafu kwenye UI
+                if (loadingPlaceholder) {
+                    loadingPlaceholder.innerHTML = `
+                            <i class="fas fa-exclamation-triangle" style="color:#ff6b7a;"></i>
+                            <p>Imeshindwa kupakia michezo. Jaribu tena baadaye.</p>
+                        `;
+                    loadingPlaceholder.style.color = '#ff6b7a';
+                } else {
+                    container.innerHTML = `
+                            <div class="empty-state" style="color:#ff6b7a;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Imeshindwa kupakia michezo.</p>
+                            </div>
+                        `;
+                }
+            }
+        }
+
+        // ------------------------------------------------------------------
+        //  Angalia hali ya mtumiaji (kwa ajili ya kiungo cha admin)
+        //  - Ikiwa ni admin, tunaweza kubadilisha kiungo au kuongeza vipengele
+        //  - Hapa tunabaki na kiungo cha kawaida, lakini tunaweza kuficha
+        //    au kuonyesha vitu kulingana na hali.
+        // ------------------------------------------------------------------
+        onAuthStateChanged((user) => {
+            const adminLink = document.querySelector('.admin-link');
+            if (user && isAdminUser(user)) {
+                // Admin amelogin — tunaweza kuweka alama kwenye kiungo
+                if (adminLink) {
+                    adminLink.innerHTML = `<i class="fas fa-user-shield"></i> Admin (${user.email})`;
+                    adminLink.style.borderColor = 'rgba(240, 147, 251, 0.3)';
+                }
+            } else {
+                // Mtumiaji wa kawaida au hajalogin
+                if (adminLink) {
+                    adminLink.innerHTML = `<i class="fas fa-user-cog"></i> Admin Panel`;
+                    adminLink.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+                }
+            }
+        });
+
+        // ------------------------------------------------------------------
+        //  INIT: pakia michezo mara moja
+        // ------------------------------------------------------------------
+        loadAndRenderGames();
+
+        // (Optional) Refresh every 60 seconds — lakini si lazima
+        // setInterval(loadAndRenderGames, 60000);
+    </script>
+
+</body>
+</html>
