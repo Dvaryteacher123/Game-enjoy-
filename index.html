@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DVARY GAMES</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; text-align: center; }
+        header { background: #333; color: #fff; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .games-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .game-card { background: #fff; padding: 15px; border-radius: 8px; width: 250px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left; }
+        .game-card h3 { margin: 0 0 10px 0; color: #333; }
+        .game-card p { color: #666; font-size: 14px; margin-bottom: 15px; }
+        .play-btn { display: inline-block; background: #28a745; color: #fff; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-size: 14px; text-align: center; width: 100%; box-sizing: border-box; }
+        .play-btn:hover { background: #218838; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>DVARY GAMES</h1>
+        <p>Karibu ucheze michezo mizuri kabisa!</p>
+    </header>
+
+    <h2>Michezo Iliyopo</h2>
+    <div id="games-container" class="games-grid">
+        <p>Inapakia michezo...</p>
+    </div>
+
+    <!-- Kuunganisha na app.js -->
+    <script type="module">
+        import { getGames } from "./app.js";
+
+        async function displayGames() {
+            const container = document.getElementById("games-container");
+            try {
+                const games = await getGames();
+                if (games.length === 0) {
+                    container.innerHTML = "<p>Hakuna michezo iliyowekwa bado.</p>";
+                    return;
+                }
+
+                container.innerHTML = "";
+                games.forEach(game => {
+                    const card = document.createElement("div");
+                    card.className = "game-card";
+                    card.innerHTML = `
+                        <h3>${game.title}</h3>
+                        <p>${game.description}</p>
+                        <a href="${game.gameUrl}" target="_blank" class="play-btn">Cheza Sasa</a>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                container.innerHTML = "<p>Imeshindwa kupakia michezo.</p>";
+            }
+        }
+
+        displayGames();
+    </script>
+</body>
+</html>
+
