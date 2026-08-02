@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DVARY GAMES - Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(145deg, #0b0b1a 0%, #1a1a30 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .admin-wrapper {
+      width: 100%;
+      max-width: 1000px;
+      background: rgba(20, 20, 40, 0.8);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 30px 35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #2a2a50;
+      padding-bottom: 15px;
+    }
+    .admin-header h1 {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .admin-header .nav-links {
+      display: flex;
+      gap: 12px;
+    }
+    .admin-header .nav-links a,
+    .admin-header .nav-links button {
+      background: transparent;
+      border: 2px solid #f5576c;
+      color: #f5576c;
+      padding: 6px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .admin-header .nav-links a:hover,
+    .admin-header .nav-links button:hover {
+      background: #f5576c;
+      color: #fff;
+    }
+    #logoutBtn {
+      display: none;
+    }
+
+    /* Sehemu ya Auth (Login / Signup) - muonekano mzuri */
+    .auth-container {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0 30px;
+    }
+    .auth-box {
+      background: rgba(30, 30, 55, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 28px 30px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.2s;
+    }
+    .auth-box:hover {
+      transform: scale(1.01);
+    }
+    .auth-box h2 {
+      font-size: 1.7rem;
+      margin-bottom: 20px;
+      color: #f0f0f5;
+      text-align: center;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+    .auth-box h2 span {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .auth-box input {
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      border: none;
+      border-radius: 40px;
+      background: #232340;
+      color: #f0f0f5;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    .auth-box input:focus {
+      background: #2d2d55;
+      box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.3);
+    }
+    .auth-box button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+    }
+    .auth-box .btn-login {
+      background: linear-gradient(135deg, #f5576c, #f093fb);
+      color: #fff;
+    }
+    .auth-box .btn-login:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+    }
+    .auth-box .btn-signup {
+      background: linear-gradient(135deg, #4a6fa5, #6c8fc7);
+      color: #fff;
+    }
+    .auth-box .btn-signup:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(74, 111, 165, 0.4);
+    }
+    .auth-message {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.95rem;
+      min-height: 24px;
+    }
+
+    /* Paneli ya Admin (inaonekana baada ya kuingia) */
+    .admin-panel {
+      display: none;
+      margin-top: 25px;
+    }
+    .admin-panel.active {
+      display: block;
+    }
+    .admin-panel h2 {
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 20px;
+      color: #f0f0f5;
+      border-bottom: 1px solid #2a2a50;
+      padding-bottom: 10px;
+    }
+    .form-add-game {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      background: rgba(20, 20, 40, 0.5);
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+    }
+    .form-add-game input,
+    .form-add-game textarea {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 40px;
+      background: #232340;
+      color: #f0f0f5;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    .form-add-game input:focus,
+    .form-add-game textarea:focus {
+      background: #2d2d55;
+      box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.2);
+    }
+    .form-add-game textarea {
+      grid-column: 1 / -1;
+      resize: vertical;
+      min-height: 70px;
+      border-radius: 20px;
+    }
+    .form-add-game .full-width {
+      grid-column: 1 / -1;
+    }
+    .form-add-game button {
+      grid-column: 1 / -1;
+      padding: 14px;
+      border: none;
+      border-radius: 40px;
+      background: linear-gradient(135deg, #f5576c, #f093fb);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .form-add-game button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+    }
+
+    /* Orodha ya michezo kwa admin */
+    .admin-game-list {
+      margin-top: 15px;
+    }
+    .admin-game-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #232340;
+      padding: 12px 20px;
+      border-radius: 40px;
+      margin-bottom: 10px;
+      transition: 0.2s;
+    }
+    .admin-game-item:hover {
+      background: #2d2d55;
+    }
+    .admin-game-item span {
+      font-weight: 500;
+      color: #f0f0f5;
+    }
+    .admin-game-item .delete-btn {
+      background: #b33a4a;
+      border: none;
+      color: #fff;
+      padding: 6px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .admin-game-item .delete-btn:hover {
+      background: #8f2c3a;
+      transform: scale(1.05);
+    }
+    .no-games-msg {
+      color: #8888aa;
+      text-align: center;
+      padding: 20px;
+      font-style: italic;
+    }
+
+    @media (max-width: 700px) {
+      .admin-wrapper { padding: 20px; }
+      .auth-container { flex-direction: column; align-items: center; }
+      .auth-box { max-width: 100%; }
+      .form-add-game { grid-template-columns: 1fr; }
+      .form-add-game textarea { grid-column: 1; }
+      .form-add-game .full-width { grid-column: 1; }
+      .admin-header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+    <div class="admin-header">
+      <h1>🎮 DVARY · Admin</h1>
+      <div class="nav-links">
+        <a href="index.html">🏠 Nyumbani</a>
+        <button id="logoutBtn">🚪 Toka</button>
+      </div>
+    </div>
+
+    <!-- Sehemu ya Auth (Login / Signup) -->
+    <div id="authSection" class="auth-container">
+      <div class="auth-box">
+        <h2>🔑 <span>Ingia</span></h2>
+        <input type="email" id="loginEmail" placeholder="Barua pepe" />
+        <input type="password" id="loginPassword" placeholder="Nenosiri" />
+        <button id="loginBtn" class="btn-login">Ingia</button>
+        <div id="loginMessage" class="auth-message"></div>
+      </div>
+
+      <div class="auth-box">
+        <h2>📝 <span>Jisajili</span></h2>
+        <input type="email" id="signupEmail" placeholder="Barua pepe" />
+        <input type="password" id="signupPassword" placeholder="Nenosiri (≥6)" />
+        <button id="signupBtn" class="btn-signup">Jisajili</button>
+        <div id="signupMessage" class="auth-message"></div>
+      </div>
+    </div>
+
+    <!-- Paneli ya Admin (inaonekana baada ya kuingia) -->
+    <div id="adminPanel" class="admin-panel">
+      <h2>⚙️ Simamia Michezo</h2>
+
+      <form id="addGameForm" class="form-add-game">
+        <input type="text" id="gameTitle" placeholder="Jina la mchezo" required />
+        <input type="text" id="gameImage" placeholder="URL ya picha (hiari)" />
+        <textarea id="gameDescription" placeholder="Maelezo mafupi"></textarea>
+        <input type="url" id="gamePlayLink" placeholder="Kiungo cha kucheza" />
+        <input type="url" id="gameWatchLink" placeholder="Kiungo cha kutazama" />
+        <button type="submit">➕ Ongeza Mchezo</button>
+      </form>
+
+      <div class="admin-game-list" id="adminGameList">
+        <p class="no-games-msg">Michezo itaonekana hapa.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      loginUser,
+      signupUser,
+      logoutUser,
+      onAuthStateChanged,
+      getGames,
+      addGame,
+      deleteGame,
+      isAdminUser
+    } from './app.js';
+
+    // Marejeleo ya vipengele
+    const authSection = document.getElementById('authSection');
+    const adminPanel = document.getElementById('adminPanel');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginMessage = document.getElementById('loginMessage');
+
+    const signupEmail = document.getElementById('signupEmail');
+    const signupPassword = document.getElementById('signupPassword');
+    const signupBtn = document.getElementById('signupBtn');
+    const signupMessage = document.getElementById('signupMessage');
+
+    const addForm = document.getElementById('addGameForm');
+    const gameTitle = document.getElementById('gameTitle');
+    const gameImage = document.getElementById('gameImage');
+    const gameDescription = document.getElementById('gameDescription');
+    const gamePlayLink = document.getElementById('gamePlayLink');
+    const gameWatchLink = document.getElementById('gameWatchLink');
+    const adminGameList = document.getElementById('adminGameList');
+
+    // -----------------------------------------------------------------
+    // Sasisha UI kulingana na hali ya mtumiaji
+    // -----------------------------------------------------------------
+    function updateUIForUser(user) {
+      if (user && isAdminUser(user)) {
+        // Admin ameingia
+        authSection.style.display = 'none';
+        adminPanel.classList.add('active');
+        logoutBtn.style.display = 'inline-block';
+        renderAdminGames();
+      } else if (user) {
+        // Ameingia lakini sio admin
+        authSection.style.display = 'none';
+        adminPanel.classList.remove('active');
+        logoutBtn.style.display = 'inline-block';
+        adminGameList.innerHTML = `<p class="no-games-msg">⛔ Huwezi kuona au kubadilisha michezo. Barua pepe yako sio ya admin.</p>`;
+      } else {
+        // Hajaingia
+        authSection.style.display = 'flex';
+        adminPanel.classList.remove('active');
+        logoutBtn.style.display = 'none';
+        // Futa ujumbe
+        loginMessage.textContent = '';
+        signupMessage.textContent = '';
+      }
+    }
+
+    onAuthStateChanged((user) => {
+      updateUIForUser(user);
+    });
+
+    // -----------------------------------------------------------------
+    // Matukio ya kuingia / kujisajili / kutoka
+    // -----------------------------------------------------------------
+    loginBtn.addEventListener('click', async () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value.trim();
+      if (!email || !password) {
+        loginMessage.textContent = 'Tafadhali jaza barua pepe na nenosiri.';
+        loginMessage.style.color = '#ff8a92';
+        return;
+      }
+      try {
+        await loginUser(email, password);
+        loginMessage.textContent = '✅ Kuingia kumefanikiwa!';
+        loginMessage.style.color = '#6fcf97';
+      } catch (error) {
+        loginMessage.textContent = '❌ ' + error.message;
+        loginMessage.style.color = '#ff8a92';
+      }
+    });
+
+    signupBtn.addEventListener('click', async () => {
+      const email = signupEmail.value.trim();
+      const password = signupPassword.value.trim();
+      if (!email || !password) {
+        signupMessage.textContent = 'Tafadhali jaza barua pepe na nenosiri.';
+        signupMessage.style.color = '#ff8a92';
+        return;
+      }
+      if (password.length < 6) {
+        signupMessage.textContent = 'Nenosiri lazima liwe angalau herufi 6.';
+        signupMessage.style.color = '#ff8a92';
+        return;
+      }
+      try {
+        await signupUser(email, password);
+        signupMessage.textContent = '✅ Umesajiliwa! Sasa ingia.';
+        signupMessage.style.color = '#6fcf97';
+        signupEmail.value = '';
+        signupPassword.value = '';
+      } catch (error) {
+        signupMessage.textContent = '❌ ' + error.message;
+        signupMessage.style.color = '#ff8a92';
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await logoutUser();
+      // UI itasasishwa na onAuthStateChanged
+    });
+
+    // -----------------------------------------------------------------
+    // Kuonyesha michezo kwenye admin panel (pamoja na vitufe vya kufuta)
+    // -----------------------------------------------------------------
+    async function renderAdminGames() {
+      try {
+        const games = await getGames();
+        if (games.length === 0) {
+          adminGameList.innerHTML = `<p class="no-games-msg">😕 Hakuna michezo bado.</p>`;
+          return;
+        }
+        adminGameList.innerHTML = games.map(game => `
+          <div class="admin-game-item" data-id="${game.id}">
+            <span>${game.title}</span>
+            <button class="delete-btn" data-id="${game.id}">🗑️ Futa</button>
+          </div>
+        `).join('');
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            const id = e.target.dataset.id;
+            if (confirm('Je, una uhakika unataka kufuta mchezo huu?')) {
+              try {
+                await deleteGame(id);
+                renderAdminGames();
+              } catch (error) {
+                alert('Hitilafu: ' + error.message);
+              }
+            }
+          });
+        });
+      } catch (error) {
+        adminGameList.innerHTML = `<p class="no-games-msg">⚠️ Imeshindwa kupakia michezo.</p>`;
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // Kuongeza mchezo
+    // -----------------------------------------------------------------
+    addForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const newGame = {
+        title: gameTitle.value.trim(),
+        imageUrl: gameImage.value.trim() || '',
+        description: gameDescription.value.trim() || '',
+        playLink: gamePlayLink.value.trim() || '',
+        watchLink: gameWatchLink.value.trim() || '',
+        createdAt: new Date().toISOString()
+      };
+
+      if (!newGame.title) {
+        alert('Tafadhali ingiza jina la mchezo.');
+        return;
+      }
+
+      try {
+        await addGame(newGame);
+        addForm.reset();
+        renderAdminGames();
+        alert('✅ Mchezo umeongezwa!');
+      } catch (error) {
+        alert('❌ Hitilafu: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
