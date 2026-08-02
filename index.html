@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="sw" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHONEPHIX GAMES - Discover & Play</title>
+    
+    <!-- ============================================================ -->
+    <!-- PWA META TAGS -->
+    <!-- ============================================================ -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00ff88">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PhonePhix Games">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #aaa;
+            --text-muted: #888;
+            --border-color: #2a2a2a;
+            --shadow-color: rgba(0, 255, 136, 0.15);
+            --navbar-bg: rgba(10, 10, 10, 0.95);
+            --hero-bg: linear-gradient(135deg, #0a0a0a 0%, #0a1a2e 100%);
+            --footer-bg: #0a0a0a;
+            --input-bg: #0a0a0a;
+            --modal-bg: #1a1a1a;
+            --notification-bg: linear-gradient(90deg, #0a1a2e, #1a2a0a);
+            --primary-color: #00ff88;
+            --primary-hover: #00cc6a;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f0f0f0;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555;
+            --text-muted: #777;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --hero-bg: linear-gradient(135deg, #f5f5f5 0%, #e8f5f0 100%);
+            --footer-bg: #ffffff;
+            --input-bg: #ffffff;
+            --modal-bg: #ffffff;
+            --notification-bg: linear-gradient(90deg, #e8f5f0, #f5f0e8);
+            --primary-color: #00cc6a;
+            --primary-hover: #00aa55;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+            padding-top: 70px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--border-color);
+            transform: rotate(30deg);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--navbar-bg);
+            padding: 0.8rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
+            backdrop-filter: blur(10px);
+            transition: background 0.3s;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .logo span {
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.4rem 1.2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: #0a0a0a;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: #0a0a0a;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 5%;
+            background: var(--hero-bg);
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 70%);
+            transform: rotate(15deg);
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        .hero-content h1 .highlight {
+            color: var(--primary-color);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .hero-stats .stat {
+            text-align: center;
+        }
+
+        .hero-stats .stat h3 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .hero-stats .stat p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 5%;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            color: var(--text-primary);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .section-title .highlight {
+            color: var(--primary-color);
+        }
+
+        /* Game Cards Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .game-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px var(--shadow-color);
+            border-color: var(--primary-color);
+        }
+
+        .game-card .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: var(--bg-secondary);
+        }
+
+        .game-card .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-free {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-vip {
+            background: var(--primary-color);
+            color: #0a0a0a;
+        }
+
+        .game-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .game-card .card-body h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .game-card .card-body .category {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 0.2rem 1rem;
+            border-radius: 20px;
+        }
+
+        .game-card .card-body .description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0.5rem 0 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .game-card .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .game-card .card-footer .game-info {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .game-card .card-footer .game-info i {
+            color: var(--primary-color);
+        }
+
+        .card-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .download-btn {
+            background: var(--primary-color);
+            color: #0a0a0a;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        .download-more-btn {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .download-more-btn:hover {
+            background: var(--primary-color);
+            color: #0a0a0a;
+            border-color: var(--primary-color);
+        }
+
+        .play-trailer-btn {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 1px solid var(--primary-color);
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .play-trailer-btn:hover {
+            background: var(--primary-color);
+            color: #0a0a0a;
+        }
+
+        /* Download Links Dropdown */
+        .download-links-dropdown {
+            display: none;
+            margin-top: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        .download-links-dropdown.active {
+            display: block;
+        }
+
+        .download-links-dropdown a {
+            display: block;
+            padding: 0.4rem 0.8rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .download-links-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .download-links-dropdown a:hover {
+            background: var(--primary-color);
+            color: #0a0a0a;
+        }
+
+        /* Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .category-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 20px var(--shadow-color);
+        }
+
+        .category-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .category-card h4 {
+            font-size: 1rem;
+        }
+
+        /* Notifications */
+        .notification-bar {
+            background: var(--notification-bg);
+            padding: 1rem 5%;
+            border-left: 4px solid var(--primary-color);
+            margin: 0 5% 2rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.5s ease;
+            transition: background 0.3s;
+        }
+
+        .notification-bar i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .notification-bar .notification-content {
+            flex: 1;
+        }
+
+        .notification-bar .notification-content h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .notification-bar .notification-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .notification-bar .notification-content img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal .video-container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .video-modal .video-container iframe {
+            width: 100%;
+            height: 450px;
+            border-radius: 10px;
+        }
+
+        .video-modal .close-video {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .video-modal .close-video:hover {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--footer-bg);
+            padding: 3rem 5%;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+            transition: background 0.3s;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .footer a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: 0.3s;
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer .social-links a {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .footer .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer .whatsapp-group {
+            background: #25D366;
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .footer .whatsapp-group:hover {
+            background: #128C7E;
+            color: white !important;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.3s;
+        }
+
+        .modal-content .close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .modal-content input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-content .btn {
+            width: 100%;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--navbar-bg);
+                flex-direction: column;
+                padding: 1rem 5%;
+                border-bottom: 2px solid var(--primary-color);
+                gap: 0.8rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .hero-stats .stat h3 {
+                font-size: 1.8rem;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .section {
+                padding: 2rem 5%;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 1rem;
+            }
+
+            .notification-bar {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer .social-links {
+                justify-content: center;
+            }
+
+            .video-modal .video-container iframe {
+                height: 200px;
+            }
+
+            .video-modal .video-container {
+                width: 95%;
+            }
+
+            .nav-right .theme-toggle {
+                font-size: 1rem;
+                padding: 0.3rem;
+            }
+
+            .auth-buttons .btn {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.8rem;
+            }
+
+            .game-card .card-body h3 {
+                font-size: 1rem;
+            }
+
+            .game-card .card-footer .game-info {
+                font-size: 0.7rem;
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+
+            .download-btn {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.7rem;
+            }
+
+            .play-trailer-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.7rem;
+            }
+
+            .auth-buttons .btn {
+                padding: 0.2rem 0.6rem;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-container">
+            <button class="close-video" onclick="closeVideoModal()">&times;</button>
+            <iframe id="videoIframe" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo">PHONEPHIX<span>GAMES</span></a>
+        <div class="nav-links" id="navLinks">
+            <a href="#home">Home</a>
+            <a href="#games">Games</a>
+            <a href="#categories">Categories</a>
+            <a href="#about">About</a>
+            <a href="https://whatsapp.com/channel/0029VbCRC9b5fM5cruU8PF2M" target="_blank"><i class="fab fa-whatsapp"></i> Channel</a>
+            <a href="https://chat.whatsapp.com/Gq59bw6L4rvCafWXZfMJpi?s=cl&p=a&mlu=4" target="_blank"><i class="fab fa-whatsapp" style="color: #25D366;"></i> Group</a>
+        </div>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Change Theme">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn btn-secondary" onclick="openModal('login')">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="btn btn-primary" onclick="openModal('register')">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </div>
+            <div class="auth-buttons" id="userButtons" style="display: none;">
+                <span id="userName" style="color: var(--primary-color);"></span>
+                <button class="btn btn-danger" onclick="logoutUser()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Discover <span class="highlight">Amazing</span> Games<br>Download & Play <span class="highlight">Free</span></h1>
+            <p>Get access to thousands of premium games, mods, and updates. Join the PHONEPHIX GAMES community today!</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="#games" class="btn btn-primary">
+                    <i class="fas fa-gamepad"></i> Explore Games
+                </a>
+                <a href="#categories" class="btn btn-secondary">
+                    <i class="fas fa-th-list"></i> Categories
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3 id="totalGames">0</h3>
+                    <p>Total Games</p>
+                </div>
+                <div class="stat">
+                    <h3 id="totalUsers">0</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="stat">
+                    <h3 id="totalDownloads">0</h3>
+                    <p>Downloads</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notifications -->
+    <div id="notificationsContainer"></div>
+
+    <!-- Games Section -->
+    <section class="section" id="games">
+        <h2 class="section-title">Latest <span class="highlight">Games</span></h2>
+        <div class="games-grid" id="gamesGrid"></div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section" id="categories">
+        <h2 class="section-title">Game <span class="highlight">Categories</span></h2>
+        <div class="categories-grid">
+            <a href="#" class="category-card" data-category="Action">
+                <i class="fas fa-crosshairs"></i>
+                <h4>Action</h4>
+            </a>
+            <a href="#" class="category-card" data-category="Racing">
+                <i class="fas fa-car"></i>
+                <h4>Racing</h4>
+            </a>
+            <a href="#" class="category-card" data-category="Football">
+                <i class="fas fa-futbol"></i>
+                <h4>Football</h4>
+            </a>
+            <a href="#" class="category-card" data-category="Adventure">
+                <i class="fas fa-compass"></i>
+                <h4>Adventure</h4>
+            </a>
+            <a href="#" class="category-card" data-category="Horror">
+                <i class="fas fa-ghost"></i>
+                <h4>Horror</h4>
+            </a>
+            <a href="#" class="category-card" data-category="Multiplayer">
+                <i class="fas fa-users"></i>
+                <h4>Multiplayer</h4>
+            </a>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="section" id="about" style="background: var(--bg-secondary); transition: background 0.3s;">
+        <h2 class="section-title">About <span class="highlight">PHONEPHIX GAMES</span></h2>
+        <div style="max-width: 800px; margin: 2rem auto; text-align: center;">
+            <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8;">
+                PHONEPHIX GAMES is the ultimate gaming platform where players can discover, download, and enjoy 
+                thousands of premium games. We provide a safe, curated collection of games across all categories 
+                - from action-packed adventures to relaxing puzzle games.
+            </p>
+            <div style="margin-top: 2rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                <div>
+                    <i class="fas fa-shield-alt" style="color: var(--primary-color); font-size: 2rem;"></i>
+                    <h4 style="margin-top: 0.5rem; color: var(--text-primary);">Safe & Secure</h4>
+                </div>
+                <div>
+                    <i class="fas fa-download" style="color: var(--primary-color); font-size: 2rem;"></i>
+                    <h4 style="margin-top: 0.5rem; color: var(--text-primary);">Free Downloads</h4>
+                </div>
+                <div>
+                    <i class="fas fa-star" style="color: var(--primary-color); font-size: 2rem;"></i>
+                    <h4 style="margin-top: 0.5rem; color: var(--text-primary);">Premium Quality</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <h3>PHONEPHIX GAMES</h3>
+                <p style="color: var(--text-muted); margin: 1rem 0;">Your ultimate gaming destination</p>
+                <div class="social-links">
+                    <a href="https://whatsapp.com/channel/0029VbCRC9b5fM5cruU8PF2M" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://chat.whatsapp.com/Gq59bw6L4rvCafWXZfMJpi?s=cl&p=a&mlu=4" target="_blank"><i class="fab fa-whatsapp" style="color: #25D366;"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3>Quick Links</h3>
+                <a href="#home">Home</a>
+                <a href="#games">Games</a>
+                <a href="#categories">Categories</a>
+                <a href="#about">About</a>
+            </div>
+            <div>
+                <h3>Categories</h3>
+                <a href="#" data-category="Action">Action</a>
+                <a href="#" data-category="Racing">Racing</a>
+                <a href="#" data-category="Football">Football</a>
+                <a href="#" data-category="Adventure">Adventure</a>
+                <a href="#" data-category="Horror">Horror</a>
+                <a href="#" data-category="Multiplayer">Multiplayer</a>
+            </div>
+            <div>
+                <h3>Contact</h3>
+                <p style="color: var(--text-muted);">Email: support@phonephixgames.com</p>
+                <p style="color: var(--text-muted); margin: 0.5rem 0;">WhatsApp Channel: <a href="https://whatsapp.com/channel/0029VbCRC9b5fM5cruU8PF2M" target="_blank" style="color: var(--primary-color);">Join</a></p>
+                <a href="https://chat.whatsapp.com/Gq59bw6L4rvCafWXZfMJpi?s=cl&p=a&mlu=4" target="_blank" class="whatsapp-group" style="display: inline-block; margin-top: 0.5rem;">
+                    <i class="fab fa-whatsapp"></i> Join WhatsApp Group
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 PHONEPHIX GAMES. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('login')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+            <form id="loginForm" onsubmit="loginUser(event)">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted);">
+                Don't have an account? <a href="#" onclick="switchModal('register')" style="color: var(--primary-color);">Register</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('register')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Register</h2>
+            <form id="registerForm" onsubmit="registerUser(event)">
+                <input type="text" id="regName" placeholder="Full Name" required>
+                <input type="email" id="regEmail" placeholder="Email" required>
+                <input type="password" id="regPassword" placeholder="Password (min 6 chars)" required minlength="6">
+                <input type="tel" id="regPhone" placeholder="Phone Number">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted);">
+                Already have an account? <a href="#" onclick="switchModal('login')" style="color: var(--primary-color);">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PWA SERVICE WORKER REGISTRATION -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // REGISTER SERVICE WORKER
+        // ============================================================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                    .then((registration) => {
+                        console.log('[PWA] Service Worker registered successfully!');
+                        console.log('[PWA] Scope:', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('[PWA] New Service Worker found!');
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('[PWA] Update available! Please refresh.');
+                                    showUpdateNotification();
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('[PWA] Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // Show update notification
+        function showUpdateNotification() {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1a1a1a;
+                color: #fff;
+                padding: 1rem 2rem;
+                border-radius: 15px;
+                border: 2px solid #00ff88;
+                z-index: 9999;
+                max-width: 90%;
+                text-align: center;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+                animation: slideUp 0.5s ease;
+            `;
+            toast.innerHTML = `
+                <p style="margin-bottom: 0.5rem;">
+                    <i class="fas fa-sync-alt" style="color: #00ff88;"></i>
+                    New version available!
+                </p>
+                <button onclick="location.reload()" style="
+                    background: #00ff88;
+                    color: #0a0a0a;
+                    border: none;
+                    padding: 0.5rem 1.5rem;
+                    border-radius: 25px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                ">
+                    <i class="fas fa-refresh"></i> Update Now
+                </button>
+            `;
+            document.body.appendChild(toast);
+            
+            // Auto remove after 10 seconds
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        if (toast.parentNode) toast.remove();
+                    }, 500);
+                }
+            }, 10000);
+        }
+
+        // Add slide up animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(100px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ============================================================
+        // CHECK APP INSTALLATION STATUS
+        // ============================================================
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67+ from automatically showing the prompt
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom install button
+            showInstallButton();
+        });
+
+        function showInstallButton() {
+            // Check if button already exists
+            if (document.getElementById('installAppBtn')) return;
+            
+            const installBtn = document.createElement('div');
+            installBtn.id = 'installAppBtn';
+            installBtn.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #00ff88;
+                color: #0a0a0a;
+                padding: 0.8rem 2rem;
+                border-radius: 50px;
+                z-index: 9999;
+                font-weight: 700;
+                font-size: 1rem;
+                cursor: pointer;
+                box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
+                display: flex;
+                align-items: center;
+                gap: 0.8rem;
+                border: none;
+                animation: slideUp 0.5s ease;
+                transition: 0.3s;
+            `;
+            installBtn.innerHTML = `
+                <i class="fas fa-download"></i>
+                Install PHONEPHIX GAMES
+            `;
+            
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Show the install prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    const result = await deferredPrompt.userChoice;
+                    if (result.outcome === 'accepted') {
+                        console.log('[PWA] User accepted the install prompt');
+                        installBtn.remove();
+                    } else {
+                        console.log('[PWA] User dismissed the install prompt');
+                    }
+                    deferredPrompt = null;
+                }
+            });
+            
+            document.body.appendChild(installBtn);
+        }
+
+        // Hide install button when app is installed
+        window.addEventListener('appinstalled', (e) => {
+            console.log('[PWA] App installed successfully!');
+            const btn = document.getElementById('installAppBtn');
+            if (btn) btn.remove();
+        });
+
+        // ============================================================
+        // OFFLINE STATUS INDICATOR
+        // ============================================================
+        function updateOnlineStatus() {
+            const status = document.createElement('div');
+            status.id = 'onlineStatus';
+            status.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 10px;
+                padding: 0.3rem 1rem;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                z-index: 999;
+                transition: 0.3s;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            `;
+            
+            if (navigator.onLine) {
+                status.textContent = '🟢 Online';
+                status.style.background = 'rgba(40, 167, 69, 0.9)';
+                status.style.color = '#fff';
+            } else {
+                status.textContent = '🔴 Offline';
+                status.style.background = 'rgba(220, 53, 69, 0.9)';
+                status.style.color = '#fff';
+            }
+            
+            // Remove existing status
+            const existing = document.getElementById('onlineStatus');
+            if (existing) existing.remove();
+            document.body.appendChild(status);
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+
+        console.log('[PWA] PWA scripts loaded successfully!');
+        console.log('[PWA] - Service Worker: Ready to register');
+        console.log('[PWA] - Install Button: Ready to show');
+        console.log('[PWA] - Offline Status: Active');
+    </script>
+
+    <!-- ============================================================ -->
+    <!-- MAIN APPLICATION SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMvYgLyPNhREV6ReCosa7Ia2arDbITPmM",
+            authDomain: "dvary-game.firebaseapp.com",
+            projectId: "dvary-game",
+            storageBucket: "dvary-game.firebasestorage.app",
+            messagingSenderId: "184500970711",
+            appId: "1:184500970711:web:7f9e0de296d60900c93c92",
+            measurementId: "G-P6KSDKFK0S"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const gamesGrid = document.getElementById('gamesGrid');
+        const notificationsContainer = document.getElementById('notificationsContainer');
+        const authButtons = document.getElementById('authButtons');
+        const userButtons = document.getElementById('userButtons');
+        const userName = document.getElementById('userName');
+
+        // ============================================================
+        // MOBILE MENU TOGGLE
+        // ============================================================
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#navLinks a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // ============================================================
+        // THEME TOGGLE
+        // ============================================================
+        function toggleTheme() {
+            const html = document.getElementById('htmlRoot');
+            const icon = document.getElementById('themeIcon');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const icon = document.getElementById('themeIcon');
+            if (savedTheme === 'light') {
+                document.getElementById('htmlRoot').setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+            } else {
+                document.getElementById('htmlRoot').removeAttribute('data-theme');
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        // ============================================================
+        // VIDEO MODAL
+        // ============================================================
+        function playVideo(url) {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoIframe');
+            
+            let videoUrl = url;
+            if (url.includes('youtube.com/watch?v=')) {
+                const videoId = url.split('v=')[1]?.split('&')[0] || '';
+                videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            } else if (url.includes('youtu.be/')) {
+                const videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
+                videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            }
+            
+            iframe.src = videoUrl;
+            modal.classList.add('active');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoIframe');
+            iframe.src = '';
+            modal.classList.remove('active');
+        }
+
+        // ============================================================
+        // LOAD GAMES - UPDATED TO SHOW MULTIPLE DOWNLOAD LINKS
+        // ============================================================
+        function loadGames() {
+            db.collection('games').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+                gamesGrid.innerHTML = '';
+                let totalGames = 0;
+                let totalDownloads = 0;
+
+                snapshot.forEach((doc) => {
+                    const game = doc.data();
+                    totalGames++;
+                    if (game.downloads) totalDownloads += game.downloads;
+
+                    // Get download URLs array (fallback to single if not array)
+                    const downloadUrls = game.downloadURLs || [game.downloadURL || '#'];
+                    const firstUrl = downloadUrls[0] || '#';
+                    const extraLinks = downloadUrls.slice(1);
+                    const hasExtra = extraLinks.length > 0;
+
+                    // Generate extra links HTML
+                    let extraLinksHTML = '';
+                    if (hasExtra) {
+                        extraLinksHTML = `
+                            <button class="download-more-btn" onclick="toggleMoreLinks(this)">
+                                <i class="fas fa-chevron-down"></i> +${extraLinks.length} More
+                            </button>
+                            <div class="download-links-dropdown">
+                                ${extraLinks.map((link, idx) => `
+                                    <a href="${link}" target="_blank">
+                                        <i class="fas fa-download"></i> Link ${idx + 2}
+                                    </a>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+                    
+                    let cardHTML = `
+                        <img src="${game.image || 'https://via.placeholder.com/400x200'}" alt="${game.name}" class="card-image" onerror="this.src='https://via.placeholder.com/400x200'">
+                        <span class="card-badge ${game.type === 'VIP' ? 'badge-vip' : 'badge-free'}">${game.type || 'Free'}</span>
+                        <div class="card-body">
+                            <span class="category">${game.category || 'Uncategorized'}</span>
+                            <h3>${game.name}</h3>
+                            <p class="description">${game.description || ''}</p>
+                            <div class="card-footer">
+                                <div class="game-info">
+                                    <span><i class="fas fa-database"></i> ${game.size || 'N/A'}</span>
+                                    <span><i class="fas fa-code-branch"></i> ${game.version || '1.0'}</span>
+                                </div>
+                                <div class="card-actions">
+                                    ${game.trailer ? `
+                                        <button class="play-trailer-btn" onclick="playVideo('${game.trailer}')">
+                                            <i class="fas fa-play"></i> Trailer
+                                        </button>
+                                    ` : ''}
+                                    <a href="${firstUrl}" class="download-btn" target="_blank">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                    ${extraLinksHTML}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    card.innerHTML = cardHTML;
+                    gamesGrid.appendChild(card);
+                });
+
+                document.getElementById('totalGames').textContent = totalGames;
+                document.getElementById('totalDownloads').textContent = totalDownloads;
+            });
+        }
+
+        // Toggle dropdown for extra download links
+        function toggleMoreLinks(btn) {
+            const dropdown = btn.nextElementSibling;
+            if (dropdown && dropdown.classList.contains('download-links-dropdown')) {
+                dropdown.classList.toggle('active');
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.className = dropdown.classList.contains('active') ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+                }
+            }
+        }
+
+        // ============================================================
+        // LOAD NOTIFICATIONS
+        // ============================================================
+        function loadNotifications() {
+            db.collection('notifications').orderBy('date', 'desc').onSnapshot((snapshot) => {
+                notificationsContainer.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const notif = doc.data();
+                    const div = document.createElement('div');
+                    div.className = 'notification-bar';
+                    div.innerHTML = `
+                        <i class="fas fa-bell"></i>
+                        <div class="notification-content">
+                            <h4>${notif.title}</h4>
+                            <p>${notif.message}</p>
+                            ${notif.image ? `<img src="${notif.image}" onerror="this.style.display='none'">` : ''}
+                            <small style="color: var(--text-muted);">${notif.date}</small>
+                        </div>
+                    `;
+                    notificationsContainer.appendChild(div);
+                });
+            });
+        }
+
+        // ============================================================
+        // LOAD USER STATS
+        // ============================================================
+        function loadUserStats() {
+            db.collection('users').get().then((snapshot) => {
+                document.getElementById('totalUsers').textContent = snapshot.size;
+            });
+        }
+
+        // ============================================================
+        // AUTH FUNCTIONS
+        // ============================================================
+        function openModal(type) {
+            document.getElementById(type + 'Modal').classList.add('active');
+        }
+
+        function closeModal(type) {
+            document.getElementById(type + 'Modal').classList.remove('active');
+        }
+
+        function switchModal(type) {
+            closeModal(type === 'login' ? 'register' : 'login');
+            openModal(type);
+        }
+
+        function registerUser(event) {
+            event.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const phone = document.getElementById('regPhone').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    return db.collection('users').doc(user.uid).set({
+                        userId: user.uid,
+                        name: name,
+                        email: email,
+                        phone: phone || '',
+                        joinedDate: new Date().toISOString(),
+                        status: 'active'
+                    });
+                })
+                .then(() => {
+                    closeModal('register');
+                    alert('Registration successful!');
+                })
+                .catch((error) => {
+                    alert('Error: ' + error.message);
+                });
+        }
+
+        function loginUser(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    closeModal('login');
+                    alert('Login successful!');
+                })
+                .catch((error) => {
+                    alert('Error: ' + error.message);
+                });
+        }
+
+        function logoutUser() {
+            auth.signOut().then(() => {
+                alert('Logged out successfully');
+            });
+        }
+
+        // ============================================================
+        // AUTH STATE OBSERVER
+        // ============================================================
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                authButtons.style.display = 'none';
+                userButtons.style.display = 'flex';
+                
+                db.collection('users').doc(user.uid).get().then((doc) => {
+                    if (doc.exists) {
+                        userName.textContent = doc.data().name || user.email;
+                    } else {
+                        userName.textContent = user.email;
+                    }
+                });
+            } else {
+                authButtons.style.display = 'flex';
+                userButtons.style.display = 'none';
+            }
+        });
+
+        // ============================================================
+        // CATEGORY FILTER
+        // ============================================================
+        document.querySelectorAll('[data-category]').forEach((element) => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = element.dataset.category;
+                gamesGrid.innerHTML = '<div style="text-align: center; width: 100%; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><br>Loading...</div>';
+                
+                db.collection('games')
+                    .where('category', '==', category)
+                    .orderBy('createdAt', 'desc')
+                    .get()
+                    .then((snapshot) => {
+                        gamesGrid.innerHTML = '';
+                        if (snapshot.empty) {
+                            gamesGrid.innerHTML = '<div style="text-align: center; width: 100%; padding: 2rem; color: var(--text-muted);">No games found in this category</div>';
+                            return;
+                        }
+                        snapshot.forEach((doc) => {
+                            const game = doc.data();
+                            const downloadUrls = game.downloadURLs || [game.downloadURL || '#'];
+                            const firstUrl = downloadUrls[0] || '#';
+                            const extraLinks = downloadUrls.slice(1);
+                            const hasExtra = extraLinks.length > 0;
+
+                            let extraLinksHTML = '';
+                            if (hasExtra) {
+                                extraLinksHTML = `
+                                    <button class="download-more-btn" onclick="toggleMoreLinks(this)">
+                                        <i class="fas fa-chevron-down"></i> +${extraLinks.length} More
+                                    </button>
+                                    <div class="download-links-dropdown">
+                                        ${extraLinks.map((link, idx) => `
+                                            <a href="${link}" target="_blank">
+                                                <i class="fas fa-download"></i> Link ${idx + 2}
+                                            </a>
+                                        `).join('')}
+                                    </div>
+                                `;
+                            }
+
+                            const card = document.createElement('div');
+                            card.className = 'game-card';
+                            card.innerHTML = `
+                                <img src="${game.image || 'https://via.placeholder.com/400x200'}" alt="${game.name}" class="card-image" onerror="this.src='https://via.placeholder.com/400x200'">
+                                <span class="card-badge ${game.type === 'VIP' ? 'badge-vip' : 'badge-free'}">${game.type || 'Free'}</span>
+                                <div class="card-body">
+                                    <span class="category">${game.category || 'Uncategorized'}</span>
+                                    <h3>${game.name}</h3>
+                                    <p class="description">${game.description || ''}</p>
+                                    <div class="card-footer">
+                                        <div class="game-info">
+                                            <span><i class="fas fa-database"></i> ${game.size || 'N/A'}</span>
+                                            <span><i class="fas fa-code-branch"></i> ${game.version || '1.0'}</span>
+                                        </div>
+                                        <div class="card-actions">
+                                            ${game.trailer ? `
+                                                <button class="play-trailer-btn" onclick="playVideo('${game.trailer}')">
+                                                    <i class="fas fa-play"></i> Trailer
+                                                </button>
+                                            ` : ''}
+                                            <a href="${firstUrl}" class="download-btn" target="_blank">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                            ${extraLinksHTML}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            gamesGrid.appendChild(card);
+                        });
+                    })
+                    .catch((error) => {
+                        gamesGrid.innerHTML = '<div style="text-align: center; width: 100%; padding: 2rem; color: #dc3545;">Error loading games</div>';
+                        console.error(error);
+                    });
+            });
+        });
+
+        // ============================================================
+        // CLOSE MODALS ON OUTSIDE CLICK
+        // ============================================================
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+            if (event.target.classList.contains('video-modal')) {
+                closeVideoModal();
+            }
+        }
+
+        // Close video modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
+
+        // ============================================================
+        // INITIALIZE
+        // ============================================================
+        loadTheme();
+        loadGames();
+        loadNotifications();
+        loadUserStats();
+    </script>
+</body>
+  </html>
