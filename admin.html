@@ -1,0 +1,573 @@
+<!--
+  ============================================================
+  FILE:  admin.html  (Bila password - ingia moja kwa moja)
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DVARY GAMES · Admin (Bila Password)</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #0b0e1a 0%, #1a1f33 100%);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 40px 32px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header .brand {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .header .brand-sub {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+        }
+
+        .header h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(245, 87, 108, 0.35);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.2px;
+            margin-top: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-outline {
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-outline.danger {
+            color: #ff6b7a;
+            border-color: rgba(255, 71, 87, 0.2);
+        }
+
+        .btn-outline.danger:hover {
+            background: rgba(255, 71, 87, 0.12);
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.06), transparent);
+            margin: 24px 0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 16px;
+            letter-spacing: -0.2px;
+        }
+
+        .section-title i {
+            margin-right: 8px;
+            color: #f093fb;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #f5576c;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(245, 87, 108, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .game-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .game-item .game-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .game-item .game-info .title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .game-item .game-info .desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .game-item .btn-delete {
+            padding: 4px 12px;
+            background: rgba(255, 71, 87, 0.12);
+            border: 1px solid rgba(255, 71, 87, 0.15);
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #ff6b7a;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+
+        .game-item .btn-delete:hover {
+            background: rgba(255, 71, 87, 0.2);
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 0;
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 14px;
+        }
+
+        .empty-state i {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+            opacity: 0.4;
+        }
+
+        .games-list {
+            margin-top: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .games-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .games-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+
+        .games-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 6px 14px 6px 10px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .user-badge i {
+            color: #f093fb;
+            font-size: 14px;
+        }
+
+        .user-badge span {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 28px 20px;
+                border-radius: 24px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-header h2 {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- SEHEMU YA LOGIN (Rahisi - Bila Password) -->
+        <div id="login-section">
+            <div class="header">
+                <div class="brand">DVARY <span style="font-weight:300;">GAMES</span></div>
+                <div class="brand-sub">Admin Panel</div>
+                <h2>Ingia kama Admin</h2>
+                <p>Bonyeza kitufe hapa chini kuingia</p>
+            </div>
+
+            <button id="login-btn" class="btn-primary">
+                <i class="fas fa-sign-in-alt" style="margin-right:10px;"></i> Ingia Bila Password
+            </button>
+
+            <div style="text-align:center;margin-top:16px;">
+                <a href="index.html" style="color:rgba(255,255,255,0.3);text-decoration:none;font-size:13px;">
+                    <i class="fas fa-arrow-left"></i> Rudi kwenye Michezo
+                </a>
+            </div>
+        </div>
+
+        <!-- DASHBOARD (Inaonekana baada ya "kulogin") -->
+        <div id="dashboard-section" class="hidden">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-gamepad" style="color:#f093fb;margin-right:8px;"></i>Dashibodi</h2>
+                <div class="user-badge">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admin</span>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
+                <button id="logout-btn" class="btn-outline danger">
+                    <i class="fas fa-sign-out-alt"></i> Toka
+                </button>
+            </div>
+
+            <hr class="divider" />
+
+            <!-- Ongeza Game -->
+            <div class="section-title"><i class="fas fa-plus-circle"></i> Ongeza Game Mpya</div>
+            <form id="add-game-form">
+                <div class="form-group">
+                    <label>Jina la Game</label>
+                    <input type="text" id="game-title" required placeholder="Mfano: Car Racing" />
+                </div>
+                <div class="form-group">
+                    <label>Maelezo</label>
+                    <textarea id="game-desc" required placeholder="Maelezo mafupi ya game..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Link ya Game</label>
+                    <input type="url" id="game-url" required placeholder="https://..." />
+                </div>
+                <button type="submit" class="btn-secondary">
+                    <i class="fas fa-upload" style="margin-right:8px;"></i> Weka Game
+                </button>
+            </form>
+
+            <hr class="divider" />
+
+            <!-- Orodha ya Michezo -->
+            <div class="section-title"><i class="fas fa-list"></i> Michezo Iliyopo</div>
+            <div id="admin-games-list" class="games-list">
+                <div class="empty-state">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                    Inapakia...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // ------------------------------------------------------------------
+        //  Import from app.js - tumia Firestore direct, hakuna auth
+        // ------------------------------------------------------------------
+        import { getGames, addGame, deleteGame } from "./app.js";
+
+        // DOM refs
+        const loginSection = document.getElementById('login-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const addGameForm = document.getElementById('add-game-form');
+        const adminGamesList = document.getElementById('admin-games-list');
+
+        // "Login" - onyesha dashboard
+        loginBtn.addEventListener('click', () => {
+            loginSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+            loadAdminGamesList();
+        });
+
+        // "Logout" - rudi kwenye login
+        logoutBtn.addEventListener('click', () => {
+            dashboardSection.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+            adminGamesList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-spinner fa-pulse"></i>
+                        Inapakia...
+                    </div>
+                `;
+        });
+
+        // Add Game
+        addGameForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('game-title').value.trim();
+            const description = document.getElementById('game-desc').value.trim();
+            const gameUrl = document.getElementById('game-url').value.trim();
+
+            if (!title || !description || !gameUrl) {
+                alert('Tafadhali jaza sehemu zote.');
+                return;
+            }
+
+            try {
+                await addGame({ title, description, gameUrl });
+                alert('✅ Game imeongezwa kikamilifu!');
+                addGameForm.reset();
+                loadAdminGamesList();
+            } catch (error) {
+                alert('❌ Imeshindwa kuongeza game: ' + error.message);
+            }
+        });
+
+        // Load games
+        async function loadAdminGamesList() {
+            adminGamesList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-spinner fa-pulse"></i>
+                        Inapakia...
+                    </div>
+                `;
+
+            try {
+                const games = await getGames();
+
+                if (!games || games.length === 0) {
+                    adminGamesList.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-gamepad" style="opacity:0.3;"></i>
+                                Hakuna michezo iliyopo.
+                            </div>
+                        `;
+                    return;
+                }
+
+                adminGamesList.innerHTML = '';
+                games.forEach((game) => {
+                    const item = document.createElement('div');
+                    item.className = 'game-item';
+                    item.innerHTML = `
+                            <div class="game-info">
+                                <span class="title">${escapeHtml(game.title)}</span>
+                                <span class="desc">${escapeHtml(game.description || '')}</span>
+                            </div>
+                            <button class="btn-delete" data-id="${game.id}">
+                                <i class="fas fa-trash-alt" style="margin-right:4px;"></i> Futa
+                            </button>
+                        `;
+
+                    const deleteBtn = item.querySelector('.btn-delete');
+                    deleteBtn.addEventListener('click', async () => {
+                        if (confirm(`Una uhakika unataka kufuta "${game.title}"?`)) {
+                            try {
+                                await deleteGame(game.id);
+                                loadAdminGamesList();
+                            } catch (err) {
+                                alert('❌ Imeshindwa kufuta: ' + err.message);
+                            }
+                        }
+                    });
+
+                    adminGamesList.appendChild(item);
+                });
+            } catch (error) {
+                adminGamesList.innerHTML = `
+                        <div class="empty-state" style="color:#ff6b7a;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Imeshindwa kupakia michezo.
+                        </div>
+                    `;
+                console.error('Error loading games:', error);
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Ikiwa tayari umeingia (kwa mfano, ukirefresh) - tunabaki kwenye login
+        // Hakuna autologin, mtumiaji anabonyeza "Ingia Bila Password"
+    </script>
+
+</body>
+</html>
