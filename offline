@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - PHONEPHIX GAMES</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .offline-container {
+            max-width: 400px;
+        }
+        .offline-container i {
+            font-size: 5rem;
+            color: #00ff88;
+            margin-bottom: 1.5rem;
+        }
+        .offline-container h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .offline-container p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #00ff88;
+            color: #0a0a0a;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #00cc6a;
+            transform: scale(1.05);
+        }
+        .btn i {
+            font-size: 1rem;
+            margin-right: 0.5rem;
+            color: #0a0a0a;
+        }
+        .btn i:hover {
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <i class="fas fa-wifi"></i>
+        <h1>📡 You're Offline</h1>
+        <p>
+            Oops! It seems you've lost your internet connection.
+            Please check your network and try again.
+        </p>
+        <button class="btn" onclick="location.reload()">
+            <i class="fas fa-sync-alt"></i> Retry Connection
+        </button>
+        <br><br>
+        <a href="/" class="btn" style="background: #2a2a2a; color: #fff;">
+            <i class="fas fa-home"></i> Go to Homepage
+        </a>
+    </div>
+</body>
+</html>
